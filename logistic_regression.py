@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
 def training(classifier, X_train, y_train, X_test, y_test):
     """
@@ -15,13 +16,9 @@ def training(classifier, X_train, y_train, X_test, y_test):
         y_test: target variable for test set
     Returns:
     --------
-        regressor: the fitted regressor
-        y_pred_train,: y predict with k fold cross validation for training set
-        y_pred_test: y predict for test set
-        r2_train: R squared for training set
-        mse_train: Mean Squared Error for training set 
-        r2_test: R Squared for test set
-        mse_test: Mean Squared Error for test set
+        classifier: the fitted classifier
+        metrics: classification metrics
+        preds: predictions on training and test set
     """
         
     # Fitting and predicting for training set
@@ -29,7 +26,7 @@ def training(classifier, X_train, y_train, X_test, y_test):
     y_pred_train = classifier.predict(X_train)
     
     # Getting metrics for training set
-    acc_train = accuracy_score(y_train, y_pred_train, multioutput = 'raw_values')
+    acc_train = accuracy_score(y_train, y_pred_train)
     precision_train = precision_score(y_train, y_pred_train)
     recall_train = recall_score(y_train, y_pred_train)
     f1_train = f1_score(y_train, y_pred_train)
@@ -38,7 +35,7 @@ def training(classifier, X_train, y_train, X_test, y_test):
     y_pred_test = cross_val_predict(estimator = classifier, X = X_test, y = y_test, cv = 5, n_jobs = 3)
     
     # Getting metrics for test set
-    acc_test = accuracy_score(y_test, y_pred_test, multioutput = 'raw_values')
+    acc_test = accuracy_score(y_test, y_pred_test)
     precision_test = precision_score(y_test, y_pred_test)
     recall_test = recall_score(y_test, y_pred_test)
     f1_test = f1_score(y_test, y_pred_test)
@@ -157,7 +154,7 @@ y_test = lb.inverse_transform(y_test)
 y_train = lb.inverse_transform(y_train)
 
 # Metrics for neural net
-acc_test = accuracy_score(y_test, y_pred_rede, multioutput = 'raw_values')
+acc_test = accuracy_score(y_test, y_pred_rede)
 precision_test = precision_score(y_test, y_pred_rede)
 recall_test = recall_score(y_test, y_pred_rede)
 f1_test = f1_score(y_test, y_pred_rede)
