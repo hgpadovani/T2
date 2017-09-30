@@ -1,7 +1,6 @@
 # Logistic Regression
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.model_selection import cross_val_predict
 
@@ -116,9 +115,8 @@ clf_multinom, preds_one_x_all, metrics_one_x_all = training(clf_multinom, X_trai
 
 # Model 3 - Neural Nets
 # Importingthe Keras library and packages
-import keras
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 
 # Initialising the ANN and adding the layers
 clf_nn = Sequential()
@@ -153,8 +151,8 @@ y_test = lb.inverse_transform(y_test)
 y_train = lb.inverse_transform(y_train)
 
 # Metrics for neural net
-acc_test = accuracy_score(y_test, y_pred_rede)
-precision_test = precision_score(y_test, y_pred_rede)
-recall_test = recall_score(y_test, y_pred_rede)
-f1_test = f1_score(y_test, y_pred_rede)
-cm_test = confusion_matrix(y_test, y_pred_rede)
+acc_test = accuracy_score(y_test, y_pred_nn)
+precision_test = precision_score(y_test, y_pred_nn)
+recall_test = recall_score(y_test, y_pred_nn)
+f1_test = f1_score(y_test, y_pred_nn)
+cm_test = confusion_matrix(y_test, y_pred_nn)
