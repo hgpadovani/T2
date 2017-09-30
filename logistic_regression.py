@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+from sklearn.model_selection import cross_val_predict
 
 def training(classifier, X_train, y_train, X_test, y_test):
     """
@@ -27,9 +28,9 @@ def training(classifier, X_train, y_train, X_test, y_test):
     
     # Getting metrics for training set
     acc_train = accuracy_score(y_train, y_pred_train)
-    precision_train = precision_score(y_train, y_pred_train)
-    recall_train = recall_score(y_train, y_pred_train)
-    f1_train = f1_score(y_train, y_pred_train)
+    precision_train = precision_score(y_train, y_pred_train, average = 'micro')
+    recall_train = recall_score(y_train, y_pred_train, average = 'micro')
+    f1_train = f1_score(y_train, y_pred_train, average = 'micro')
     
     # Predicting with cross validation on test set
     y_pred_test = cross_val_predict(estimator = classifier, X = X_test, y = y_test, cv = 5, n_jobs = 3)
@@ -144,12 +145,10 @@ y_test = lb.fit_transform(y_test)
 clf_nn.fit(X_train, y_train, batch_size = 200, epochs = 100)
 
 # Predicting the Test set results
-
 y_pred_nn = clf_nn.predict(X_test)
 
 # Getting metrics, must return to undummed format
-y_pred_rede = classifier.predict(X_test)
-y_pred_rede = lb.inverse_transform(y_pred_rede)
+y_pred_nn = lb.inverse_transform(y_pred_nn)
 y_test = lb.inverse_transform(y_test)
 y_train = lb.inverse_transform(y_train)
 
