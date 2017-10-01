@@ -36,9 +36,9 @@ def training(classifier, X_train, y_train, X_test, y_test):
     
     # Getting metrics for test set
     acc_test = accuracy_score(y_test, y_pred_test)
-    precision_test = precision_score(y_test, y_pred_test)
-    recall_test = recall_score(y_test, y_pred_test)
-    f1_test = f1_score(y_test, y_pred_test)
+    precision_test = precision_score(y_test, y_pred_test, average = 'micro')
+    recall_test = recall_score(y_test, y_pred_test, average = 'micro')
+    f1_test = f1_score(y_test, y_pred_test, average = 'micro')
     cm_test = confusion_matrix(y_test, y_pred_test)
     
     # Saving metrics into a dictionary
@@ -106,12 +106,12 @@ X_test = X_test[:, pval > 0.05]
 from sklearn.linear_model import LogisticRegression
 
 # Model 1 - Logistic Regression One vs All
-clf_one_x_all = LogisticRegression(solver = 'sag', multi_class= 'ovr', random_state = 0, C=0.1, n_jobs=2)
-clf_one_x_all, preds_one_x_all, metrics_one_x_all = training(clf_one_x_all, X_train, y_train, X_test, y_test)
+clf_one_x_all = LogisticRegression(solver = 'sag', multi_class= 'ovr', random_state = 0, C=0.001, n_jobs=2)
+clf_one_x_all, preds_one_x_all, metrics_one_x_all2 = training(clf_one_x_all, X_train, y_train, X_test, y_test)
 
 # Model 2 - Logistic Regression Multinomial
-clf_multinom = LogisticRegression(solver = 'sag', multi_class= 'multinomial', random_state = 0, C=0.1, n_jobs=2)
-clf_multinom, preds_one_x_all, metrics_one_x_all = training(clf_multinom, X_train, y_train, X_test, y_test)
+clf_multinom = LogisticRegression(solver = 'sag', multi_class= 'multinomial', random_state = 0, C=0.001, n_jobs=2)
+clf_multinom, preds_multinom, metrics_multinom = training(clf_multinom, X_train, y_train, X_test, y_test)
 
 # Model 3 - Neural Nets
 # Importingthe Keras library and packages
@@ -125,13 +125,13 @@ clf_nn.add(Dropout(0.3))
 clf_nn.add(Dense(output_dim = 100, init = 'uniform', activation = 'relu')) # not necessary to inform the input dimension
 clf_nn.add(Dropout(0.3))
 clf_nn.add(Dense(output_dim = 10, init = 'uniform', activation = 'softmax')) # One output, using sigmoid for propabilistic outcome
-clf_nn.add(Dropout(0.3))
+#clf_nn.add(Dropout(0.3))
 
 # Compiling the ANN
 # adam = a type of stochastic gradient descent
 # loss = crossentropy for sigmoid function
 # metrics = tunned for best accuracy
-clf_nn.compile(optimizer = 'adam', loss = 'c', metrics = ['accuracy'])
+clf_nn.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
 
 # creating dummies to the neural net
 from sklearn import preprocessing
@@ -152,7 +152,7 @@ y_train = lb.inverse_transform(y_train)
 
 # Metrics for neural net
 acc_test = accuracy_score(y_test, y_pred_nn)
-precision_test = precision_score(y_test, y_pred_nn)
-recall_test = recall_score(y_test, y_pred_nn)
-f1_test = f1_score(y_test, y_pred_nn)
+precision_test = precision_score(y_test, y_pred_nn, average = 'micro')
+recall_test = recall_score(y_test, y_pred_nn, average = 'micro')
+f1_test = f1_score(y_test, y_pred_nn, average = 'micro')
 cm_test = confusion_matrix(y_test, y_pred_nn)
